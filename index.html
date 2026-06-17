@@ -70,6 +70,8 @@
   .list{ display:flex; flex-direction:column; gap:12px; }
   .req{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px 20px; transition:.15s; }
   .req.fresh{ animation:pop .6s ease; }
+  .req.done{ background:#FBFBF9; border-color:#EDEAE1; }
+  .req.done .req-item{ color:var(--mut); }
   @keyframes pop{ from{ background:var(--acc-soft); } to{ background:var(--card); } }
   .req-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
   .req-item{ font-family:'Assistant',sans-serif; font-weight:600; font-size:18px; line-height:1.3; }
@@ -153,13 +155,21 @@
     </section>
 
     <div class="list-head">
-      <h2>בקשות אחרונות</h2>
+      <h2>בקשות פעילות</h2>
       <span class="count" id="count"></span>
     </div>
 
     <div id="list" class="list">
       <div class="state"><i class="ti ti-loader-2"></i>טוען בקשות…</div>
     </div>
+
+    <section id="suppliedSection" style="display:none; margin-top:40px;">
+      <div class="list-head">
+        <h2 style="display:flex; align-items:center; gap:8px;"><i class="ti ti-circle-check" style="color:var(--acc); font-size:20px;"></i>בקשות שסופקו</h2>
+        <span class="count" id="suppliedCount"></span>
+      </div>
+      <div id="suppliedList" class="list"></div>
+    </section>
   </div>
 
   <div class="toast" id="toast"><i class="ti ti-circle-check"></i><span id="toastMsg">הבקשה נשלחה</span></div>
@@ -191,18 +201,11 @@
       return STATUSES.map(s => `<option value="${s}"${s===current?' selected':''}>${s}</option>`).join('');
     }
 
-    function render(data, freshId){
-      const list = $('list');
-      if(!data.length){
-        list.innerHTML = '<div class="state"><i class="ti ti-clipboard-list"></i>אין בקשות עדיין. הוסיפו את הראשונה למעלה.</div>';
-        $('count').textContent = '';
-        return;
-      }
-      $('count').textContent = data.length + (data.length === 1 ? ' בקשה' : ' בקשות');
-      list.innerHTML = data.map(r => {
-        const hasNotes = r.notes && r.notes.trim();
-        return `
-        <div class="req${r.id===freshId?' fresh':''}">
+    function card(r, freshId){
+      const hasNotes = r.notes && r.notes.trim();
+      const done = r.status === 'סופק';
+      return `
+        <div class="req${done?' done':''}${r.id===freshId?' fresh':''}">
           <div class="req-top">
             <div>
               <div class="req-item">${esc(r.item)}</div>
@@ -230,7 +233,33 @@
             </div>
           </div>
         </div>`;
-      }).join('');
+    }
+
+    function countLabel(n){ return n + (n === 1 ? ' בקשה' : ' בקשות'); }
+
+    function render(data, freshId){
+      const active = data.filter(r => r.status !== 'סופק');
+      const supplied = data.filter(r => r.status === 'סופק');
+
+      const list = $('list');
+      if(!active.length){
+        const msg = data.length ? 'אין בקשות פעילות — כולן סופקו 🎉' : 'אין בקשות עדיין. הוסיפו את הראשונה למעלה.';
+        list.innerHTML = `<div class="state"><i class="ti ti-clipboard-list"></i>${msg}</div>`;
+        $('count').textContent = '';
+      } else {
+        list.innerHTML = active.map(r => card(r, freshId)).join('');
+        $('count').textContent = countLabel(active.length);
+      }
+
+      const sec = $('suppliedSection');
+      if(supplied.length){
+        sec.style.display = 'block';
+        $('suppliedList').innerHTML = supplied.map(r => card(r, freshId)).join('');
+        $('suppliedCount').textContent = countLabel(supplied.length);
+      } else {
+        sec.style.display = 'none';
+        $('suppliedList').innerHTML = '';
+      }
     }
 
     async function load(freshId){
