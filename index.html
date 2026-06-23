@@ -283,7 +283,7 @@
           <div class="edit-controls">
             <div class="ec-field">
               <label>סטטוס</label>
-              <select onchange="updateStatus('${r.id}', this.value)">${statusOptions(r.status)}</select>
+              <select onchange="onStatusChange('${r.id}', this.value)">${statusOptions(r.status)}</select>
             </div>
             <div class="ec-field">
               <label>עדיפות</label>
@@ -358,10 +358,21 @@
       load(data ? data.id : null);
     }
 
+    function onStatusChange(id, value){
+      if(value === 'בוטל'){ cancelRequest(id); return; }
+      updateStatus(id, value);
+    }
     async function updateStatus(id, status){
       const { error } = await db.from('purchase_requests').update({ status }).eq('id', id);
       if(error){ showErr('שגיאה בעדכון סטטוס: ' + error.message); return; }
       toast('הסטטוס עודכן');
+      load();
+    }
+    async function cancelRequest(id){
+      if(!confirm('לבטל ולמחוק את הבקשה לצמיתות? לא ניתן לשחזר.')){ load(); return; }
+      const { error } = await db.from('purchase_requests').delete().eq('id', id);
+      if(error){ showErr('שגיאה במחיקת הבקשה: ' + error.message); load(); return; }
+      toast('הבקשה בוטלה ונמחקה');
       load();
     }
     async function updatePriority(id, priority){
@@ -376,9 +387,11 @@
       toast('ההערה נשמרה');
       load();
     }
+    window.onStatusChange = onStatusChange;
     window.updateStatus = updateStatus;
     window.updatePriority = updatePriority;
     window.updateNotes = updateNotes;
+    window.cancelRequest = cancelRequest;
 
     function toggleMode(){
       if(editMode){
