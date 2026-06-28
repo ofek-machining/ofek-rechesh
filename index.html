@@ -46,6 +46,8 @@
   .mode-btn:hover{ border-color:var(--acc); color:var(--acc-d); }
   body.edit-mode #modeBtn{ background:var(--acc); color:#fff; border-color:var(--acc); }
   #installBtn{ display:none; }
+  .mode-btn.on{ background:var(--acc); color:#fff; border-color:var(--acc); }
+  .mode-btn.on:hover{ color:#fff; }
 
   .mode-banner{ display:none; background:var(--acc-soft); color:var(--acc-d); border:1px solid #BFE7D8;
     border-radius:8px; padding:10px 16px; font-size:15px; margin-bottom:20px; align-items:center; gap:8px; }
@@ -168,6 +170,7 @@
         <span class="today"><i class="ti ti-calendar"></i><span id="todayLabel"></span></span>
         <div class="top-actions">
           <button class="mode-btn" id="installBtn"><i class="ti ti-device-mobile-down"></i>התקן אפליקציה</button>
+          <button class="mode-btn" id="notifBtn"><i class="ti ti-bell"></i>הפעל התראות</button>
           <button class="mode-btn" id="modeBtn"><i class="ti ti-user-cog"></i><span id="modeLabel">מצב איש רכש</span></button>
         </div>
       </div>
@@ -410,6 +413,8 @@
     $('submitBtn').addEventListener('click', submit);
     $('modeBtn').addEventListener('click', toggleMode);
     $('suppliedToggle').addEventListener('click', toggleSupplied);
+    $('notifBtn').addEventListener('click', enableNotifications);
+    refreshNotifState();
     document.addEventListener('keydown', (e) => {
       if(e.key === 'Enter' && (e.target.id === 'item' || e.target.id === 'requester')) submit();
     });
@@ -434,6 +439,50 @@
     window.addEventListener('appinstalled', () => { $('installBtn').style.display = 'none'; });
     if('serviceWorker' in navigator){
       window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
+    }
+
+    // ---- התראות דחיפה (Web Push) לאנשי רכש ----
+    const VAPID_PUBLIC = "BLNALkmqNk4w583rct4XAchOrPVFuvFd3T9CUzZTQjmBuRF8zV8gmcMKNxhd-k98X07bmX1m2Rnzw5zYkNLs1qA";
+    function urlB64ToUint8Array(b64){
+      const pad = '='.repeat((4 - b64.length % 4) % 4);
+      const base = (b64 + pad).replace(/-/g,'+').replace(/_/g,'/');
+      const raw = atob(base);
+      return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
+    }
+    function setNotifBtn(on){
+      const b = $('notifBtn'); if(!b) return;
+      b.innerHTML = on ? '<i class="ti ti-bell-ringing"></i>התראות פעילות' : '<i class="ti ti-bell"></i>הפעל התראות';
+      b.classList.toggle('on', on);
+    }
+    async function refreshNotifState(){
+      try {
+        if(!('serviceWorker' in navigator) || !('PushManager' in window) || Notification.permission !== 'granted'){ setNotifBtn(false); return; }
+        const reg = await navigator.serviceWorker.ready;
+        const sub = await reg.pushManager.getSubscription();
+        setNotifBtn(!!sub);
+      } catch(_) { setNotifBtn(false); }
+    }
+    async function enableNotifications(){
+      if(!editMode){
+        const pin = prompt('הזן קוד איש רכש כדי להפעיל התראות במכשיר הזה:');
+        if(pin === null) return;
+        if(pin !== EDIT_PIN){ alert('קוד שגוי.'); return; }
+      }
+      if(!('serviceWorker' in navigator) || !('PushManager' in window)){
+        alert('הדפדפן הזה לא תומך בהתראות. באייפון צריך קודם להתקין את האפליקציה למסך הבית (כפתור שיתוף → הוסף למסך הבית).'); return;
+      }
+      let perm;
+      try { perm = await Notification.requestPermission(); } catch(_) { perm = Notification.permission; }
+      if(perm !== 'granted'){ alert('ההתראות נחסמו. אפשר לאשר אותן בהגדרות הדפדפן/האפליקציה.'); return; }
+      try {
+        const reg = await navigator.serviceWorker.ready;
+        let sub = await reg.pushManager.getSubscription();
+        if(!sub){ sub = await reg.pushManager.subscribe({ userVisibleOnly:true, applicationServerKey: urlB64ToUint8Array(VAPID_PUBLIC) }); }
+        const { error } = await db.from('push_subscriptions').upsert({ endpoint: sub.endpoint, username: 'רכש', subscription: sub.toJSON() }, { onConflict:'endpoint' });
+        if(error){ showErr('שגיאה בהפעלת התראות: ' + error.message); return; }
+        setNotifBtn(true);
+        toast('התראות הופעלו ✓');
+      } catch(e){ showErr('שגיאה בהפעלת התראות: ' + (e.message || e)); }
     }
 
     // ---- סנכרון בזמן אמת בין כל המכשירים ----

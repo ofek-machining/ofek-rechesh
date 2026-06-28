@@ -1,4 +1,4 @@
-const CACHE = 'ofek-rechesh-v2';
+const CACHE = 'ofek-rechesh-v3';
 const SHELL = ['./', './index.html', './logo.png', './icon-192.png', './icon-512.png', './manifest.webmanifest'];
 
 self.addEventListener('install', (e) => {
@@ -27,5 +27,33 @@ self.addEventListener('fetch', (e) => {
         return res;
       })
       .catch(() => caches.match(req).then((m) => m || caches.match('./index.html')))
+  );
+});
+
+// ---- התראות דחיפה ----
+self.addEventListener('push', (e) => {
+  let data = {};
+  try { data = e.data ? e.data.json() : {}; } catch (_) { data = { title: 'בקשות רכש', body: e.data ? e.data.text() : '' }; }
+  const title = data.title || 'בקשות רכש';
+  const opts = {
+    body: data.body || '',
+    icon: './icon-192.png',
+    badge: './icon-192.png',
+    dir: 'rtl',
+    lang: 'he',
+    tag: data.tag || 'ofek-rechesh',
+    data: { url: data.url || './' },
+  };
+  e.waitUntil(self.registration.showNotification(title, opts));
+});
+
+self.addEventListener('notificationclick', (e) => {
+  e.notification.close();
+  const url = (e.notification.data && e.notification.data.url) || './';
+  e.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((list) => {
+      for (const c of list) { if ('focus' in c) { c.navigate(url); return c.focus(); } }
+      if (clients.openWindow) return clients.openWindow(url);
+    })
   );
 });
