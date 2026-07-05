@@ -15,32 +15,33 @@
 <meta name="apple-mobile-web-app-title" content="בקשות רכש" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700&family=Heebo:wght@400;500&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;500;600;700;800&family=Heebo:wght@400;500&display=swap" rel="stylesheet" />
 <style>
   :root{
-    --cream:#F6F5F1; --card:#FFFFFF; --ink:#1F1D1A; --mut:#6B675F;
-    --line:#E4E1D8; --acc:#1D9E75; --acc-d:#0F6E56; --acc-soft:#E1F5EE;
+    --cream:#F4F3EE; --card:#FFFFFF; --ink:#1F1D1A; --mut:#6B675F;
+    --line:#E4E1D8; --line2:#EDEBE4; --acc:#1D9E75; --acc-d:#0F6E56; --acc-soft:#E1F5EE;
     --danger:#A32D2D; --danger-soft:#FCEBEB;
     --amber:#854F0B; --amber-soft:#FAEEDA;
-    --blue:#185FA5; --blue-soft:#E6F1FB;
     --gray2:#5F5E5A; --gray-soft:#F1EFE8;
+    --shadow:0 1px 2px rgba(31,29,26,.04), 0 4px 16px rgba(31,29,26,.05);
   }
   *{ box-sizing:border-box; margin:0; padding:0; }
   html,body{ background:var(--cream); color:var(--ink); font-family:'Heebo',sans-serif; }
-  body{ min-height:100vh; padding:32px 20px 64px; }
-  .wrap{ max-width:920px; margin:0 auto; }
+  body{ min-height:100vh; padding:28px 20px 72px; }
+  .wrap{ max-width:960px; margin:0 auto; }
+  h1,h2,h3,label,.hd{ font-family:'Assistant',sans-serif; }
 
-  header.top{ display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:24px; flex-wrap:wrap; }
-  .brand{ display:flex; align-items:center; gap:16px; }
-  .logo-img{ height:56px; width:auto; display:block; }
-  h1{ font-family:'Assistant',sans-serif; font-weight:700; font-size:28px; line-height:1.2; }
-  .sub{ margin-top:4px; font-size:15px; color:var(--mut); }
-  .topright{ display:flex; flex-direction:column; align-items:flex-end; gap:10px; }
-  .today{ font-size:16px; color:var(--mut); display:inline-flex; align-items:center; gap:6px; white-space:nowrap; }
+  header.top{ display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:22px; flex-wrap:wrap; }
+  .brand{ display:flex; align-items:center; gap:14px; }
+  .logo-img{ height:52px; width:auto; display:block; }
+  h1{ font-weight:800; font-size:27px; line-height:1.15; letter-spacing:-.5px; }
+  .sub{ margin-top:3px; font-size:14px; color:var(--mut); }
+  .topright{ display:flex; flex-direction:column; align-items:flex-end; gap:9px; }
+  .today{ font-size:15px; color:var(--mut); display:inline-flex; align-items:center; gap:6px; white-space:nowrap; }
   .top-actions{ display:flex; gap:8px; flex-wrap:wrap; justify-content:flex-end; }
   .mode-btn{
-    font-family:'Assistant',sans-serif; font-weight:500; font-size:15px; padding:8px 16px; cursor:pointer;
-    background:var(--card); color:var(--ink); border:1px solid var(--line); border-radius:8px; transition:.15s;
+    font-family:'Assistant',sans-serif; font-weight:600; font-size:14px; padding:8px 14px; cursor:pointer;
+    background:var(--card); color:var(--ink); border:1px solid var(--line); border-radius:10px; transition:.15s;
     display:inline-flex; align-items:center; gap:6px;
   }
   .mode-btn:hover{ border-color:var(--acc); color:var(--acc-d); }
@@ -50,108 +51,149 @@
   .mode-btn.on:hover{ color:#fff; }
 
   .mode-banner{ display:none; background:var(--acc-soft); color:var(--acc-d); border:1px solid #BFE7D8;
-    border-radius:8px; padding:10px 16px; font-size:15px; margin-bottom:20px; align-items:center; gap:8px; }
+    border-radius:10px; padding:10px 16px; font-size:14px; margin-bottom:18px; align-items:center; gap:8px; }
   body.edit-mode .mode-banner{ display:flex; }
 
-  .panel{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:24px; margin-bottom:32px; }
-  label{ display:block; font-family:'Assistant',sans-serif; font-weight:500; font-size:16px; margin-bottom:8px; }
+  .panel{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:22px; margin-bottom:22px; box-shadow:var(--shadow); }
+  label{ display:block; font-weight:600; font-size:15px; margin-bottom:7px; }
   input[type=text], .form-select{
-    width:100%; height:48px; font-family:'Heebo',sans-serif; font-size:16px; padding:0 16px;
-    background:var(--cream); border:1px solid var(--line); border-radius:8px; color:var(--ink); transition:.15s;
+    width:100%; height:46px; font-family:'Heebo',sans-serif; font-size:16px; padding:0 15px;
+    background:var(--cream); border:1px solid var(--line); border-radius:10px; color:var(--ink); transition:.15s;
   }
   input[type=text]::placeholder{ color:#A8A49B; }
   input[type=text]:focus, .form-select:focus{ outline:none; border-color:var(--acc); box-shadow:0 0 0 3px var(--acc-soft); }
-  .mb16{ margin-bottom:16px; }
+  .mb14{ margin-bottom:14px; }
 
-  .row{ display:flex; flex-wrap:wrap; align-items:flex-end; gap:16px; }
-  .grow{ flex:1; min-width:200px; }
-  .field-sm{ min-width:150px; }
+  .row{ display:flex; flex-wrap:wrap; align-items:flex-end; gap:14px; }
+  .grow{ flex:1; min-width:190px; }
+  .field-sm{ min-width:140px; }
   .date-locked{
-    height:48px; display:flex; align-items:center; gap:8px; padding:0 16px;
-    background:var(--gray-soft); border:1px solid var(--line); border-radius:8px; color:var(--mut); font-size:16px; white-space:nowrap;
+    height:46px; display:flex; align-items:center; gap:8px; padding:0 15px;
+    background:var(--gray-soft); border:1px solid var(--line); border-radius:10px; color:var(--mut); font-size:15px; white-space:nowrap;
   }
   .btn{
-    height:48px; font-family:'Assistant',sans-serif; font-weight:600; font-size:16px; padding:0 28px;
-    background:var(--acc); color:#fff; border:none; border-radius:8px; cursor:pointer; transition:.15s;
+    height:46px; font-family:'Assistant',sans-serif; font-weight:700; font-size:16px; padding:0 26px;
+    background:var(--acc); color:#fff; border:none; border-radius:10px; cursor:pointer; transition:.15s;
     display:inline-flex; align-items:center; gap:8px;
   }
   .btn:hover{ background:var(--acc-d); }
   .btn:disabled{ opacity:.55; cursor:default; }
+  .attach-btn{
+    height:46px; font-family:'Assistant',sans-serif; font-weight:600; font-size:15px; padding:0 16px; cursor:pointer;
+    background:var(--cream); color:var(--ink); border:1px dashed var(--line); border-radius:10px; transition:.15s;
+    display:inline-flex; align-items:center; gap:7px; white-space:nowrap;
+  }
+  .attach-btn:hover{ border-color:var(--acc); color:var(--acc-d); }
+  .attach-btn.has{ border-style:solid; border-color:var(--acc); color:var(--acc-d); background:var(--acc-soft); }
+  .img-preview{ margin-top:14px; position:relative; width:96px; height:96px; }
+  .img-preview img{ width:96px; height:96px; object-fit:cover; border-radius:10px; border:1px solid var(--line); }
+  .img-preview .rm{ position:absolute; top:-8px; left:-8px; width:24px; height:24px; border-radius:50%;
+    background:var(--ink); color:#fff; border:none; cursor:pointer; font-size:16px; line-height:1; }
 
-  .list-head{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px; padding:0 4px; }
-  .list-head h2{ font-family:'Assistant',sans-serif; font-weight:600; font-size:20px; }
-  .count{ font-size:16px; color:var(--mut); }
+  /* ---- control bar ---- */
+  .controls{ position:sticky; top:0; z-index:20; background:var(--cream); padding:10px 0 12px; margin-bottom:8px; }
+  .search{ position:relative; margin-bottom:12px; }
+  .search i{ position:absolute; right:14px; top:50%; transform:translateY(-50%); color:var(--mut); font-size:18px; }
+  .search input{ padding-right:42px; height:44px; background:var(--card); box-shadow:var(--shadow); }
+  .filters{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+  .chips{ display:flex; gap:7px; flex-wrap:wrap; flex:1; }
+  .chip{ font-family:'Assistant',sans-serif; font-weight:600; font-size:14px; padding:7px 13px; border-radius:999px; cursor:pointer;
+    background:var(--card); border:1px solid var(--line); color:var(--ink); transition:.12s; display:inline-flex; align-items:center; gap:7px; }
+  .chip:hover{ border-color:var(--acc); }
+  .chip .c{ font-size:12px; font-weight:700; background:var(--gray-soft); color:var(--gray2); border-radius:999px; padding:1px 7px; min-width:20px; text-align:center; }
+  .chip.active{ background:var(--ink); color:#fff; border-color:var(--ink); }
+  .chip.active .c{ background:rgba(255,255,255,.22); color:#fff; }
+  .date-sel{ height:38px; font-family:'Heebo',sans-serif; font-size:14px; padding:0 12px; background:var(--card);
+    border:1px solid var(--line); border-radius:10px; color:var(--ink); cursor:pointer; }
+  .date-sel:focus{ outline:none; border-color:var(--acc); }
+  .group-btn{ height:38px; font-family:'Assistant',sans-serif; font-weight:600; font-size:14px; padding:0 14px; cursor:pointer;
+    background:var(--card); border:1px solid var(--line); border-radius:10px; color:var(--ink); transition:.12s; display:inline-flex; align-items:center; gap:6px; }
+  .group-btn:hover{ border-color:var(--acc); }
+  .group-btn.on{ background:var(--acc); color:#fff; border-color:var(--acc); }
 
-  .list{ display:flex; flex-direction:column; gap:0; background:var(--card); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
-  .list > .state{ border:none; background:transparent; border-radius:0; }
-  .req{ background:var(--card); border:none; border-bottom:1px solid var(--line); border-radius:0; padding:12px 18px; transition:.15s; }
+  /* ---- list ---- */
+  #list{ display:flex; flex-direction:column; gap:16px; }
+  .list{ display:flex; flex-direction:column; gap:0; background:var(--card); border:1px solid var(--line); border-radius:16px; overflow:hidden; box-shadow:var(--shadow); }
+  .group-head{ display:flex; align-items:center; gap:8px; margin:2px 4px 8px; }
+  .group-head .count{ font-size:14px; color:var(--mut); }
+  .req{ display:flex; gap:14px; align-items:flex-start; background:var(--card); border:none; border-bottom:1px solid var(--line2); padding:14px 18px; transition:.15s; }
   .req:last-child{ border-bottom:none; }
-  .req.fresh{ animation:pop .6s ease; }
+  .req-body{ flex:1; min-width:0; }
+  .req.fresh{ animation:pop .7s ease; }
   .req.done{ background:#FBFBF9; }
   .req.done .req-item{ color:var(--mut); }
   @keyframes pop{ from{ background:var(--acc-soft); } to{ background:var(--card); } }
   .req-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
-  .req-item{ font-family:'Assistant',sans-serif; font-weight:600; font-size:17px; line-height:1.3; }
-  .req-meta{ margin-top:6px; display:flex; flex-wrap:wrap; gap:8px 16px; font-size:15px; color:var(--mut); align-items:center; }
-
-  .supplied-toggle{ width:100%; display:flex; align-items:center; justify-content:space-between; gap:8px;
-    background:var(--card); border:1px solid var(--line); border-radius:12px; padding:14px 18px; cursor:pointer;
-    font-family:'Assistant',sans-serif; font-weight:600; font-size:18px; color:var(--ink); transition:.15s; }
-  .supplied-toggle:hover{ border-color:var(--acc); }
-  .supplied-toggle .st-left{ display:flex; align-items:center; gap:8px; }
-  .supplied-toggle .st-left .count{ font-weight:400; }
-  .supplied-toggle .chev{ transition:transform .2s; font-size:20px; color:var(--mut); }
-  .supplied-toggle.open .chev{ transform:rotate(180deg); }
+  .req-item{ font-family:'Assistant',sans-serif; font-weight:700; font-size:17px; line-height:1.3; word-break:break-word; }
+  .req-meta{ margin-top:7px; display:flex; flex-wrap:wrap; gap:7px 14px; font-size:14px; color:var(--mut); align-items:center; }
   .req-meta i{ font-size:15px; vertical-align:-2px; margin-left:4px; }
+  .req-thumb{ width:60px; height:60px; object-fit:cover; border-radius:10px; border:1px solid var(--line); cursor:pointer; flex-shrink:0; transition:.15s; }
+  .req-thumb:hover{ transform:scale(1.04); border-color:var(--acc); }
 
-  .pill{ font-family:'Assistant',sans-serif; font-weight:500; font-size:14px; padding:5px 12px; border-radius:999px; white-space:nowrap; }
+  .pill{ font-family:'Assistant',sans-serif; font-weight:600; font-size:13px; padding:5px 12px; border-radius:999px; white-space:nowrap; }
   .pill.st-ממתין{ background:var(--danger-soft); color:var(--danger); }
   .pill.st-בטיפול{ background:var(--amber-soft); color:var(--amber); }
   .pill.st-הוזמן{ background:#FDEFA8; color:#7A5A0A; }
   .pill.st-סופק{ background:var(--acc-soft); color:var(--acc-d); }
   .pill.st-בוטל{ background:var(--gray-soft); color:var(--gray2); }
 
-  .prio{ font-family:'Assistant',sans-serif; font-weight:500; font-size:13px; padding:3px 10px; border-radius:999px;
+  .prio{ font-family:'Assistant',sans-serif; font-weight:600; font-size:12px; padding:3px 9px; border-radius:999px;
     display:inline-flex; align-items:center; gap:4px; white-space:nowrap; }
-  .prio i{ font-size:14px; margin:0; vertical-align:0; }
+  .prio i{ font-size:13px; margin:0; vertical-align:0; }
   .prio-דחופה{ background:var(--danger-soft); color:var(--danger); }
   .prio-גבוהה{ background:var(--amber-soft); color:var(--amber); }
   .prio-רגילה{ background:var(--gray-soft); color:var(--gray2); }
 
-  .req-notes{ margin-top:10px; font-size:15px; color:var(--ink); background:var(--cream); border:1px solid var(--line);
-    border-radius:8px; padding:10px 14px; display:flex; gap:8px; }
+  .req-notes{ margin-top:10px; font-size:14px; color:var(--ink); background:var(--cream); border:1px solid var(--line2);
+    border-radius:10px; padding:9px 13px; display:flex; gap:8px; }
   .req-notes i{ color:var(--mut); font-size:16px; margin-top:2px; }
-  .req-notes.empty{ color:#A8A49B; }
 
   .edit-controls{ display:none; margin-top:12px; padding-top:12px; border-top:1px dashed var(--line); gap:12px; flex-wrap:wrap; align-items:flex-end; }
   body.edit-mode .edit-controls{ display:flex; }
   body.edit-mode .pill{ display:none; }
   .ec-field{ display:flex; flex-direction:column; gap:6px; }
-  .ec-field label{ margin:0; font-size:14px; color:var(--mut); font-weight:500; }
+  .ec-field label{ margin:0; font-size:13px; color:var(--mut); font-weight:600; }
   select, .notes-input{
     height:40px; font-family:'Heebo',sans-serif; font-size:15px; padding:0 12px; background:var(--card);
-    border:1px solid var(--line); border-radius:8px; color:var(--ink);
+    border:1px solid var(--line); border-radius:10px; color:var(--ink);
   }
   select:focus, .notes-input:focus{ outline:none; border-color:var(--acc); box-shadow:0 0 0 3px var(--acc-soft); }
-  .notes-input{ min-width:280px; flex:1; }
+  .notes-input{ min-width:240px; flex:1; }
 
-  .state{ background:var(--card); border:1px solid var(--line); border-radius:12px; padding:40px 20px; text-align:center; color:var(--mut); font-size:16px; }
-  .state i{ font-size:28px; display:block; margin-bottom:10px; opacity:.6; }
-  .err{ background:var(--danger-soft); color:var(--danger); border:1px solid #F0C9C9; border-radius:8px;
-        padding:12px 16px; font-size:15px; margin-bottom:16px; display:none; }
+  .supplied-toggle{ width:100%; display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:16px;
+    background:var(--card); border:1px solid var(--line); border-radius:16px; padding:14px 18px; cursor:pointer;
+    font-family:'Assistant',sans-serif; font-weight:700; font-size:17px; color:var(--ink); transition:.15s; box-shadow:var(--shadow); }
+  .supplied-toggle:hover{ border-color:var(--acc); }
+  .supplied-toggle .st-left{ display:flex; align-items:center; gap:8px; }
+  .supplied-toggle .st-left .count{ font-weight:400; color:var(--mut); }
+  .supplied-toggle .chev{ transition:transform .2s; font-size:20px; color:var(--mut); }
+  .supplied-toggle.open .chev{ transform:rotate(180deg); }
 
-  .toast{ position:fixed; bottom:24px; right:24px; background:var(--ink); color:#fff;
-    font-family:'Assistant',sans-serif; font-weight:500; font-size:15px; padding:12px 18px; border-radius:10px;
-    display:flex; align-items:center; gap:8px; opacity:0; transform:translateY(8px); transition:.25s; pointer-events:none; z-index:50; }
+  .state{ background:var(--card); border:1px solid var(--line); border-radius:16px; padding:44px 20px; text-align:center; color:var(--mut); font-size:16px; box-shadow:var(--shadow); }
+  .state i{ font-size:30px; display:block; margin-bottom:10px; opacity:.55; }
+  .err{ background:var(--danger-soft); color:var(--danger); border:1px solid #F0C9C9; border-radius:10px;
+        padding:12px 16px; font-size:14px; margin-bottom:14px; display:none; }
+
+  .toast{ position:fixed; bottom:22px; right:22px; background:var(--ink); color:#fff;
+    font-family:'Assistant',sans-serif; font-weight:600; font-size:15px; padding:12px 18px; border-radius:12px;
+    display:flex; align-items:center; gap:8px; opacity:0; transform:translateY(8px); transition:.25s; pointer-events:none; z-index:120; }
   .toast.show{ opacity:1; transform:translateY(0); }
   .toast i{ color:#5DCAA5; font-size:18px; }
 
+  .lightbox{ display:none; position:fixed; inset:0; background:rgba(20,18,15,.85); z-index:200; align-items:center; justify-content:center; padding:24px; }
+  .lightbox.show{ display:flex; }
+  .lightbox img{ max-width:100%; max-height:100%; border-radius:12px; box-shadow:0 10px 40px rgba(0,0,0,.4); }
+  .lightbox .x{ position:absolute; top:18px; left:18px; width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,.15);
+    color:#fff; border:none; font-size:22px; cursor:pointer; }
+
   @media (max-width:560px){
-    body{ padding:20px 14px 56px; }
-    .logo-img{ height:44px; }
-    h1{ font-size:24px; }
+    body{ padding:18px 12px 60px; }
+    .logo-img{ height:42px; }
+    h1{ font-size:23px; }
     .req-top{ flex-direction:column; }
     .notes-input{ min-width:0; width:100%; }
+    .chips{ flex:1 1 100%; }
+    .filters{ gap:8px; }
   }
 </style>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.7.0/dist/tabler-icons.min.css" />
@@ -176,12 +218,12 @@
       </div>
     </header>
 
-    <div class="mode-banner"><i class="ti ti-pencil"></i>מצב עדכון פעיל — אפשר לשנות סטטוס ולכתוב הערות. שאר השדות נעולים.</div>
+    <div class="mode-banner"><i class="ti ti-pencil"></i>מצב עדכון פעיל — אפשר לשנות סטטוס, עדיפות ולכתוב הערות.</div>
 
     <section class="panel">
       <div class="err" id="errBox"></div>
       <label for="item">מה צריך לרכוש?</label>
-      <input type="text" id="item" class="mb16" placeholder='לדוגמה: שמן חיתוך 20 ליטר, מקדחים 8 מ&quot;מ, כפפות עבודה…' autocomplete="off" />
+      <input type="text" id="item" class="mb14" placeholder='לדוגמה: שמן חיתוך 20 ליטר, מקדחים 8 מ&quot;מ, כפפות עבודה…' autocomplete="off" />
       <div class="row">
         <div class="grow">
           <label for="requester">שם הדורש</label>
@@ -196,6 +238,11 @@
           </select>
         </div>
         <div>
+          <label>תמונה</label>
+          <input type="file" id="imageInput" accept="image/*" style="display:none" />
+          <button type="button" class="attach-btn" id="attachBtn"><i class="ti ti-camera"></i><span id="attachLabel">צרף תמונה</span></button>
+        </div>
+        <div>
           <label style="color:var(--mut);">תאריך הבקשה</label>
           <div class="date-locked" title="נקבע אוטומטית, לא ניתן לשינוי">
             <i class="ti ti-lock"></i><span id="lockedDate"></span>
@@ -203,18 +250,34 @@
         </div>
         <button class="btn" id="submitBtn"><i class="ti ti-plus"></i> שלח בקשה</button>
       </div>
+      <div class="img-preview" id="imagePreview" style="display:none">
+        <img id="imagePreviewImg" alt="תצוגה מקדימה" />
+        <button type="button" class="rm" id="removeImg" title="הסר">×</button>
+      </div>
     </section>
 
-    <div class="list-head">
-      <h2>בקשות פעילות</h2>
-      <span class="count" id="count"></span>
+    <div class="controls">
+      <div class="search">
+        <i class="ti ti-search"></i>
+        <input type="text" id="search" placeholder="חיפוש לפי פריט או שם דורש…" autocomplete="off" />
+      </div>
+      <div class="filters">
+        <div class="chips" id="statusChips"></div>
+        <select class="date-sel" id="dateFilter">
+          <option value="all">כל התאריכים</option>
+          <option value="today">היום</option>
+          <option value="7">7 ימים אחרונים</option>
+          <option value="30">30 ימים אחרונים</option>
+        </select>
+        <button class="group-btn" id="groupBtn"><i class="ti ti-layout-list"></i>קבץ לפי סטטוס</button>
+      </div>
     </div>
 
-    <div id="list" class="list">
+    <div id="list">
       <div class="state"><i class="ti ti-loader-2"></i>טוען בקשות…</div>
     </div>
 
-    <section id="suppliedSection" style="display:none; margin-top:32px;">
+    <section id="suppliedSection" style="display:none;">
       <button class="supplied-toggle" id="suppliedToggle" aria-expanded="false">
         <span class="st-left"><i class="ti ti-circle-check" style="color:var(--acc);"></i>בקשות שסופקו <span class="count" id="suppliedCount"></span></span>
         <i class="ti ti-chevron-down chev"></i>
@@ -224,16 +287,19 @@
   </div>
 
   <div class="toast" id="toast"><i class="ti ti-circle-check"></i><span id="toastMsg">הבקשה נשלחה</span></div>
+  <div class="lightbox" id="lightbox"><button class="x" id="lightboxX">×</button><img id="lightboxImg" src="" alt="תמונת בקשה" /></div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const SUPABASE_URL = "https://lsgwujpgwdusfqxamijv.supabase.co";
     const SUPABASE_KEY = "sb_publishable_Osz-jlvVA8H9Z50xhiGulQ_PB-UZxwb";
-    const EDIT_PIN = "ofek2026"; // קוד למצב "איש רכש" — אפשר לשנות כאן
+    const EDIT_PIN = "ofek2026";
     const STATUSES = ["ממתין","בטיפול","הוזמן","סופק","בוטל"];
+    const FILTER_STATUSES = ["ממתין","בטיפול","הוזמן","סופק"];
     const PRIORITIES = ["רגילה","גבוהה","דחופה"];
     const PRIO_RANK = { "דחופה":0, "גבוהה":1, "רגילה":2 };
     const PRIO_ICON = { "דחופה":"ti-flame", "גבוהה":"ti-arrow-up", "רגילה":"ti-minus" };
+    const IMG_BUCKET = "rechesh-images";
     const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const $ = (id) => document.getElementById(id);
@@ -249,9 +315,17 @@
     let toastTimer;
     function toast(msg){ $('toastMsg').textContent = msg || 'הבקשה נשלחה'; const t=$('toast'); t.classList.add('show'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),2600); }
 
-    let editMode = false;
-    let suppliedOpen = false;
+    let editMode = false, suppliedOpen = false;
+    let allRequests = [], lastFresh = null;
+    let fStatus = 'all', fDate = 'all', fSearch = '', grouped = false;
 
+    // ---- lightbox ----
+    function openLightbox(url){ $('lightboxImg').src = url; $('lightbox').classList.add('show'); }
+    function closeLightbox(){ $('lightbox').classList.remove('show'); $('lightboxImg').src=''; }
+    window.openLightbox = openLightbox;
+    $('lightbox').addEventListener('click', (e)=>{ if(e.target.id==='lightbox' || e.target.id==='lightboxX') closeLightbox(); });
+
+    // ---- supplied collapsible ----
     function applySuppliedOpen(){
       $('suppliedList').style.display = suppliedOpen ? 'flex' : 'none';
       $('suppliedToggle').classList.toggle('open', suppliedOpen);
@@ -259,76 +333,108 @@
     }
     function toggleSupplied(){ suppliedOpen = !suppliedOpen; applySuppliedOpen(); }
 
-    function statusOptions(current){
-      return STATUSES.map(s => `<option value="${s}"${s===current?' selected':''}>${s}</option>`).join('');
-    }
-    function priorityOptions(current){
-      return PRIORITIES.map(p => `<option value="${p}"${p===current?' selected':''}>${p}</option>`).join('');
-    }
+    function statusOptions(current){ return STATUSES.map(s => `<option value="${s}"${s===current?' selected':''}>${s}</option>`).join(''); }
+    function priorityOptions(current){ return PRIORITIES.map(p => `<option value="${p}"${p===current?' selected':''}>${p}</option>`).join(''); }
 
-    function card(r, freshId){
+    function card(r){
       const hasNotes = r.notes && r.notes.trim();
       const done = r.status === 'סופק';
       const prio = r.priority || 'רגילה';
+      const thumb = r.image_url ? `<img class="req-thumb" src="${esc(r.image_url)}" alt="תמונה" onclick="openLightbox('${esc(r.image_url)}')" />` : '';
       return `
-        <div class="req${done?' done':''}${r.id===freshId?' fresh':''}">
-          <div class="req-top">
-            <div>
-              <div class="req-item">${esc(r.item)}</div>
-              <div class="req-meta">
-                <span class="prio prio-${esc(prio)}"><i class="ti ${PRIO_ICON[prio]||'ti-minus'}"></i>${esc(prio)}</span>
-                <span><i class="ti ti-user"></i>${esc(r.requester)}</span>
-                <span><i class="ti ti-calendar"></i>${fmtDate(r.created_at)}</span>
+        <div class="req${done?' done':''}${r.id===lastFresh?' fresh':''}">
+          <div class="req-body">
+            <div class="req-top">
+              <div>
+                <div class="req-item">${esc(r.item)}</div>
+                <div class="req-meta">
+                  <span class="prio prio-${esc(prio)}"><i class="ti ${PRIO_ICON[prio]||'ti-minus'}"></i>${esc(prio)}</span>
+                  <span><i class="ti ti-user"></i>${esc(r.requester)}</span>
+                  <span><i class="ti ti-calendar"></i>${fmtDate(r.created_at)}</span>
+                </div>
+              </div>
+              <span class="pill st-${esc(r.status)}">${esc(r.status)}</span>
+            </div>
+            ${hasNotes ? `<div class="req-notes"><i class="ti ti-message-2"></i><span>${esc(r.notes)}</span></div>` : ''}
+            <div class="edit-controls">
+              <div class="ec-field">
+                <label>סטטוס</label>
+                <select onchange="onStatusChange('${r.id}', this.value)">${statusOptions(r.status)}</select>
+              </div>
+              <div class="ec-field">
+                <label>עדיפות</label>
+                <select onchange="updatePriority('${r.id}', this.value)">${priorityOptions(prio)}</select>
+              </div>
+              <div class="ec-field" style="flex:1;">
+                <label>הערת איש רכש</label>
+                <input class="notes-input" type="text" value="${esc(r.notes)}" placeholder="הוסף הערה…"
+                       onkeydown="if(event.key==='Enter')this.blur()" onblur="updateNotes('${r.id}', this.value)" />
               </div>
             </div>
-            <span class="pill st-${esc(r.status)}">${esc(r.status)}</span>
           </div>
-          ${hasNotes ? `<div class="req-notes"><i class="ti ti-message-2"></i><span>${esc(r.notes)}</span></div>` : ''}
-          <div class="edit-controls">
-            <div class="ec-field">
-              <label>סטטוס</label>
-              <select onchange="onStatusChange('${r.id}', this.value)">${statusOptions(r.status)}</select>
-            </div>
-            <div class="ec-field">
-              <label>עדיפות</label>
-              <select onchange="updatePriority('${r.id}', this.value)">${priorityOptions(prio)}</select>
-            </div>
-            <div class="ec-field" style="flex:1;">
-              <label>הערת איש רכש</label>
-              <input class="notes-input" type="text" value="${esc(r.notes)}" placeholder="הוסף הערה…"
-                     onkeydown="if(event.key==='Enter')this.blur()"
-                     onblur="updateNotes('${r.id}', this.value)" />
-            </div>
-          </div>
+          ${thumb}
         </div>`;
     }
 
     function countLabel(n){ return n + (n === 1 ? ' בקשה' : ' בקשות'); }
-
     function byPriorityThenDate(a, b){
       const pa = PRIO_RANK[a.priority] ?? 2, pb = PRIO_RANK[b.priority] ?? 2;
       if(pa !== pb) return pa - pb;
       return new Date(b.created_at) - new Date(a.created_at);
     }
 
-    function render(data, freshId){
-      const active = data.filter(r => r.status !== 'סופק').sort(byPriorityThenDate);
-      const supplied = data.filter(r => r.status === 'סופק');
+    function matchSearch(r){
+      if(!fSearch) return true;
+      const q = fSearch.toLowerCase();
+      return String(r.item||'').toLowerCase().includes(q) || String(r.requester||'').toLowerCase().includes(q);
+    }
+    function matchDate(r){
+      if(fDate==='all') return true;
+      const d = new Date(r.created_at), now = new Date();
+      if(fDate==='today') return d.toDateString() === now.toDateString();
+      const days = fDate==='7' ? 7 : 30;
+      return d >= new Date(now.getTime() - days*86400000);
+    }
+
+    function renderChips(base){
+      const counts = { all: base.length };
+      FILTER_STATUSES.forEach(s => counts[s] = base.filter(r => r.status===s).length);
+      const chip = (val, label) => `<button class="chip${fStatus===val?' active':''}" data-status="${val}">${label}<span class="c">${counts[val]||0}</span></button>`;
+      $('statusChips').innerHTML = chip('all','הכל') + FILTER_STATUSES.map(s => chip(s, s)).join('');
+    }
+
+    function renderView(){
+      const base = allRequests.filter(r => matchSearch(r) && matchDate(r));
+      renderChips(base);
 
       const list = $('list');
+      const visible = fStatus==='all' ? base : base.filter(r => r.status===fStatus);
+      const active = (fStatus==='all') ? visible.filter(r => r.status!=='סופק') : visible;
+
       if(!active.length){
-        const msg = data.length ? 'אין בקשות פעילות — כולן סופקו 🎉' : 'אין בקשות עדיין. הוסיפו את הראשונה למעלה.';
+        const filtering = fSearch || fDate!=='all' || fStatus!=='all';
+        const msg = filtering ? 'לא נמצאו בקשות שמתאימות לסינון.' : 'אין בקשות עדיין. הוסיפו את הראשונה למעלה.';
         list.innerHTML = `<div class="state"><i class="ti ti-clipboard-list"></i>${msg}</div>`;
-        $('count').textContent = '';
+      } else if(grouped && fStatus==='all'){
+        let html = '';
+        for(const st of ["ממתין","בטיפול","הוזמן"]){
+          const g = active.filter(r => r.status===st).sort(byPriorityThenDate);
+          if(!g.length) continue;
+          html += `<div class="group"><div class="group-head"><span class="pill st-${st}">${st}</span><span class="count">${countLabel(g.length)}</span></div>` +
+                  `<div class="list">${g.map(card).join('')}</div></div>`;
+        }
+        list.innerHTML = html;
       } else {
-        list.innerHTML = active.map(r => card(r, freshId)).join('');
-        $('count').textContent = countLabel(active.length);
+        const sorted = [...active].sort(byPriorityThenDate);
+        list.innerHTML = `<div class="list">${sorted.map(card).join('')}</div>`;
       }
 
+      // supplied section — only in "all" view
       const sec = $('suppliedSection');
-      if(supplied.length){
+      const supplied = base.filter(r => r.status==='סופק');
+      if(fStatus==='all' && supplied.length){
         sec.style.display = 'block';
-        $('suppliedList').innerHTML = supplied.map(r => card(r, freshId)).join('');
+        $('suppliedList').innerHTML = supplied.map(card).join('');
         $('suppliedCount').textContent = '(' + supplied.length + ')';
         applySuppliedOpen();
       } else {
@@ -339,10 +445,51 @@
 
     async function load(freshId){
       const { data, error } = await db.from('purchase_requests')
-        .select('id,item,requester,created_at,status,notes,priority').order('created_at', { ascending:false });
+        .select('id,item,requester,created_at,status,notes,priority,image_url').order('created_at', { ascending:false });
       if(error){ showErr('שגיאה בטעינת הבקשות: ' + error.message); return; }
       clearErr();
-      render(data || [], freshId);
+      allRequests = data || [];
+      if(freshId) lastFresh = freshId;
+      renderView();
+      if(freshId) setTimeout(()=>{ lastFresh=null; }, 1200);
+    }
+
+    // ---- image upload ----
+    let pickedFile = null;
+    $('attachBtn').addEventListener('click', ()=> $('imageInput').click());
+    $('imageInput').addEventListener('change', (e)=>{
+      const f = e.target.files && e.target.files[0];
+      if(!f) return;
+      pickedFile = f;
+      $('imagePreviewImg').src = URL.createObjectURL(f);
+      $('imagePreview').style.display = 'block';
+      $('attachBtn').classList.add('has');
+      $('attachLabel').textContent = 'תמונה צורפה';
+    });
+    function clearImage(){
+      pickedFile = null; $('imageInput').value=''; $('imagePreview').style.display='none';
+      $('imagePreviewImg').src=''; $('attachBtn').classList.remove('has'); $('attachLabel').textContent='צרף תמונה';
+    }
+    $('removeImg').addEventListener('click', clearImage);
+
+    async function compressImage(file){
+      if(!file || !file.type.startsWith('image/')) return file;
+      try{
+        const img = await createImageBitmap(file);
+        const max = 1280; let { width, height } = img;
+        if(Math.max(width,height) > max){ const s = max/Math.max(width,height); width=Math.round(width*s); height=Math.round(height*s); }
+        const canvas = document.createElement('canvas'); canvas.width=width; canvas.height=height;
+        canvas.getContext('2d').drawImage(img,0,0,width,height);
+        const blob = await new Promise(res => canvas.toBlob(res,'image/jpeg',0.82));
+        return blob || file;
+      }catch(_){ return file; }
+    }
+    async function uploadImage(file){
+      const blob = await compressImage(file);
+      const path = `${Date.now()}-${Math.random().toString(36).slice(2,8)}.jpg`;
+      const { error } = await db.storage.from(IMG_BUCKET).upload(path, blob, { contentType:'image/jpeg', upsert:false });
+      if(error) throw error;
+      return db.storage.from(IMG_BUCKET).getPublicUrl(path).data.publicUrl;
     }
 
     async function submit(){
@@ -353,101 +500,91 @@
       if(!requester){ showErr('נא לרשום את שם הדורש.'); $('requester').focus(); return; }
       clearErr();
       const btn = $('submitBtn'); btn.disabled = true;
-      const { data, error } = await db.from('purchase_requests')
-        .insert({ item, requester, priority }).select().single();
+      const orig = btn.innerHTML;
+      try {
+        let image_url = null;
+        if(pickedFile){ btn.innerHTML = '<i class="ti ti-loader-2"></i> מעלה תמונה…'; image_url = await uploadImage(pickedFile); }
+        btn.innerHTML = orig;
+        const { data, error } = await db.from('purchase_requests')
+          .insert({ item, requester, priority, image_url }).select().single();
+        if(error){ showErr('שגיאה בשליחה: ' + error.message); btn.disabled=false; return; }
+        $('item').value=''; $('requester').value=''; $('priority').value='רגילה'; clearImage(); $('item').focus();
+        toast('הבקשה נשלחה');
+        load(data ? data.id : null);
+      } catch(e){ showErr('שגיאה בהעלאת התמונה: ' + (e.message||e)); btn.innerHTML = orig; }
       btn.disabled = false;
-      if(error){ showErr('שגיאה בשליחה: ' + error.message); return; }
-      $('item').value = ''; $('requester').value = ''; $('priority').value = 'רגילה'; $('item').focus();
-      toast('הבקשה נשלחה');
-      load(data ? data.id : null);
     }
 
-    function onStatusChange(id, value){
-      if(value === 'בוטל'){ cancelRequest(id); return; }
-      updateStatus(id, value);
-    }
+    function onStatusChange(id, value){ if(value === 'בוטל'){ cancelRequest(id); return; } updateStatus(id, value); }
     async function updateStatus(id, status){
       const { error } = await db.from('purchase_requests').update({ status }).eq('id', id);
       if(error){ showErr('שגיאה בעדכון סטטוס: ' + error.message); return; }
-      toast('הסטטוס עודכן');
-      load();
+      toast('הסטטוס עודכן'); load();
     }
     async function cancelRequest(id){
       if(!confirm('לבטל ולמחוק את הבקשה לצמיתות? לא ניתן לשחזר.')){ load(); return; }
       const { error } = await db.from('purchase_requests').delete().eq('id', id);
       if(error){ showErr('שגיאה במחיקת הבקשה: ' + error.message); load(); return; }
-      toast('הבקשה בוטלה ונמחקה');
-      load();
+      toast('הבקשה בוטלה ונמחקה'); load();
     }
     async function updatePriority(id, priority){
       const { error } = await db.from('purchase_requests').update({ priority }).eq('id', id);
       if(error){ showErr('שגיאה בעדכון עדיפות: ' + error.message); return; }
-      toast('העדיפות עודכנה');
-      load();
+      toast('העדיפות עודכנה'); load();
     }
     async function updateNotes(id, notes){
       const { error } = await db.from('purchase_requests').update({ notes: notes.trim() || null }).eq('id', id);
       if(error){ showErr('שגיאה בעדכון הערה: ' + error.message); return; }
-      toast('ההערה נשמרה');
-      load();
+      toast('ההערה נשמרה'); load();
     }
-    window.onStatusChange = onStatusChange;
-    window.updateStatus = updateStatus;
-    window.updatePriority = updatePriority;
-    window.updateNotes = updateNotes;
-    window.cancelRequest = cancelRequest;
+    window.onStatusChange = onStatusChange; window.updateStatus = updateStatus;
+    window.updatePriority = updatePriority; window.updateNotes = updateNotes; window.cancelRequest = cancelRequest;
 
     function toggleMode(){
-      if(editMode){
-        editMode = false; document.body.classList.remove('edit-mode');
-        $('modeLabel').textContent = 'מצב איש רכש';
-        return;
-      }
+      if(editMode){ editMode=false; document.body.classList.remove('edit-mode'); $('modeLabel').textContent='מצב איש רכש'; return; }
       const pin = prompt('הזן קוד לעדכון סטטוס, עדיפות והערות:');
       if(pin === null) return;
       if(pin !== EDIT_PIN){ alert('קוד שגוי.'); return; }
-      editMode = true; document.body.classList.add('edit-mode');
-      $('modeLabel').textContent = 'סיום עדכון';
+      editMode=true; document.body.classList.add('edit-mode'); $('modeLabel').textContent='סיום עדכון';
     }
+
+    // ---- filters wiring ----
+    $('statusChips').addEventListener('click', (e)=>{
+      const b = e.target.closest('.chip'); if(!b) return;
+      fStatus = b.dataset.status; renderView();
+    });
+    $('dateFilter').addEventListener('change', (e)=>{ fDate = e.target.value; renderView(); });
+    let searchTimer;
+    $('search').addEventListener('input', (e)=>{ clearTimeout(searchTimer); searchTimer=setTimeout(()=>{ fSearch = e.target.value.trim(); renderView(); }, 180); });
+    $('groupBtn').addEventListener('click', ()=>{ grouped = !grouped; $('groupBtn').classList.toggle('on', grouped); renderView(); });
 
     $('submitBtn').addEventListener('click', submit);
     $('modeBtn').addEventListener('click', toggleMode);
     $('suppliedToggle').addEventListener('click', toggleSupplied);
-    $('notifBtn').addEventListener('click', enableNotifications);
-    refreshNotifState();
     document.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape') closeLightbox();
       if(e.key === 'Enter' && (e.target.id === 'item' || e.target.id === 'requester')) submit();
     });
 
-    // ---- אפליקציה לנייד (PWA) ----
+    // ---- PWA ----
     let deferredPrompt = null;
-    window.addEventListener('beforeinstallprompt', (e) => {
-      e.preventDefault(); deferredPrompt = e; $('installBtn').style.display = 'inline-flex';
-    });
+    window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; $('installBtn').style.display = 'inline-flex'; });
     $('installBtn').addEventListener('click', async () => {
-      if(deferredPrompt){
-        deferredPrompt.prompt();
-        await deferredPrompt.userChoice;
-        deferredPrompt = null; $('installBtn').style.display = 'none';
-      } else {
+      if(deferredPrompt){ deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt=null; $('installBtn').style.display='none'; }
+      else {
         const isIOS = /iphone|ipad|ipod/i.test(navigator.userAgent);
-        alert(isIOS
-          ? 'להתקנה באייפון: לחצו על כפתור השיתוף (□↑) בסרגל הדפדפן, ואז "הוסף למסך הבית".'
-          : 'להתקנה: פתחו את תפריט הדפדפן (⋮) ובחרו "התקן אפליקציה" / "הוסף למסך הבית".');
+        alert(isIOS ? 'להתקנה באייפון: כפתור השיתוף (□↑) → "הוסף למסך הבית".' : 'להתקנה: תפריט הדפדפן (⋮) → "התקן אפליקציה".');
       }
     });
     window.addEventListener('appinstalled', () => { $('installBtn').style.display = 'none'; });
-    if('serviceWorker' in navigator){
-      window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{}));
-    }
+    if('serviceWorker' in navigator){ window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(()=>{})); }
 
-    // ---- התראות דחיפה (Web Push) לאנשי רכש ----
+    // ---- Web Push ----
     const VAPID_PUBLIC = "BLNALkmqNk4w583rct4XAchOrPVFuvFd3T9CUzZTQjmBuRF8zV8gmcMKNxhd-k98X07bmX1m2Rnzw5zYkNLs1qA";
     function urlB64ToUint8Array(b64){
       const pad = '='.repeat((4 - b64.length % 4) % 4);
       const base = (b64 + pad).replace(/-/g,'+').replace(/_/g,'/');
-      const raw = atob(base);
-      return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
+      const raw = atob(base); return Uint8Array.from([...raw].map(c => c.charCodeAt(0)));
     }
     function setNotifBtn(on){
       const b = $('notifBtn'); if(!b) return;
@@ -457,9 +594,7 @@
     async function refreshNotifState(){
       try {
         if(!('serviceWorker' in navigator) || !('PushManager' in window) || Notification.permission !== 'granted'){ setNotifBtn(false); return; }
-        const reg = await navigator.serviceWorker.ready;
-        const sub = await reg.pushManager.getSubscription();
-        setNotifBtn(!!sub);
+        const reg = await navigator.serviceWorker.ready; const sub = await reg.pushManager.getSubscription(); setNotifBtn(!!sub);
       } catch(_) { setNotifBtn(false); }
     }
     async function enableNotifications(){
@@ -469,10 +604,9 @@
         if(pin !== EDIT_PIN){ alert('קוד שגוי.'); return; }
       }
       if(!('serviceWorker' in navigator) || !('PushManager' in window)){
-        alert('הדפדפן הזה לא תומך בהתראות. באייפון צריך קודם להתקין את האפליקציה למסך הבית (כפתור שיתוף → הוסף למסך הבית).'); return;
+        alert('הדפדפן הזה לא תומך בהתראות. באייפון צריך קודם להתקין את האפליקציה למסך הבית.'); return;
       }
-      let perm;
-      try { perm = await Notification.requestPermission(); } catch(_) { perm = Notification.permission; }
+      let perm; try { perm = await Notification.requestPermission(); } catch(_) { perm = Notification.permission; }
       if(perm !== 'granted'){ alert('ההתראות נחסמו. אפשר לאשר אותן בהגדרות הדפדפן/האפליקציה.'); return; }
       try {
         const reg = await navigator.serviceWorker.ready;
@@ -480,17 +614,17 @@
         if(!sub){ sub = await reg.pushManager.subscribe({ userVisibleOnly:true, applicationServerKey: urlB64ToUint8Array(VAPID_PUBLIC) }); }
         const { error } = await db.from('push_subscriptions').upsert({ endpoint: sub.endpoint, username: 'רכש', subscription: sub.toJSON() }, { onConflict:'endpoint' });
         if(error){ showErr('שגיאה בהפעלת התראות: ' + error.message); return; }
-        setNotifBtn(true);
-        toast('התראות הופעלו ✓');
+        setNotifBtn(true); toast('התראות הופעלו ✓');
       } catch(e){ showErr('שגיאה בהפעלת התראות: ' + (e.message || e)); }
     }
+    $('notifBtn').addEventListener('click', enableNotifications);
+    refreshNotifState();
 
-    // ---- סנכרון בזמן אמת בין כל המכשירים ----
+    // ---- realtime ----
     db.channel('purchase_requests_live')
       .on('postgres_changes', { event:'*', schema:'public', table:'purchase_requests' },
           (payload) => { if(!editMode) load(payload.new ? payload.new.id : null); })
       .subscribe();
-    // רענון בעת חזרה ללשונית (גיבוי לסנכרון)
     document.addEventListener('visibilitychange', () => { if(!document.hidden && !editMode) load(); });
 
     load();

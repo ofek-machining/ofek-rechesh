@@ -1,4 +1,4 @@
-const CACHE = 'ofek-rechesh-v3';
+const CACHE = 'ofek-rechesh-v4';
 const SHELL = ['./', './index.html', './logo.png', './icon-192.png', './icon-512.png', './manifest.webmanifest'];
 
 self.addEventListener('install', (e) => {
