@@ -123,8 +123,12 @@
   .req.done{ background:#FBFBF9; }
   .req.done .req-item{ color:var(--mut); }
   @keyframes pop{ from{ background:var(--acc-soft); } to{ background:var(--card); } }
-  .req-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+  .req-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; cursor:pointer; }
+  .req-top-right{ display:flex; align-items:center; gap:10px; flex-shrink:0; }
+  .req-chev{ font-size:18px; color:var(--mut); transition:transform .2s; }
+  .req.open .req-chev{ transform:rotate(180deg); }
   .req-item{ font-family:'Assistant',sans-serif; font-weight:700; font-size:17px; line-height:1.3; word-break:break-word; }
+  .note-dot{ color:var(--acc); font-size:15px; margin-right:5px; vertical-align:-2px; }
   .req-meta{ margin-top:7px; display:flex; flex-wrap:wrap; gap:7px 14px; font-size:14px; color:var(--mut); align-items:center; }
   .req-meta i{ font-size:15px; vertical-align:-2px; margin-left:4px; }
   .req-thumb{ width:60px; height:60px; object-fit:cover; border-radius:10px; border:1px solid var(--line); cursor:pointer; flex-shrink:0; transition:.15s; }
@@ -144,9 +148,14 @@
   .prio-גבוהה{ background:var(--amber-soft); color:var(--amber); }
   .prio-רגילה{ background:var(--gray-soft); color:var(--gray2); }
 
-  .req-notes{ margin-top:10px; font-size:14px; color:var(--ink); background:var(--cream); border:1px solid var(--line2);
-    border-radius:10px; padding:9px 13px; display:flex; gap:8px; }
-  .req-notes i{ color:var(--mut); font-size:16px; margin-top:2px; }
+  .notes-panel{ display:none; margin-top:12px; padding:12px 14px; background:var(--cream); border:1px solid var(--line2); border-radius:10px; }
+  .req.open .notes-panel{ display:block; }
+  .notes-head{ font-family:'Assistant',sans-serif; font-weight:600; font-size:13px; color:var(--mut); margin-bottom:6px; display:flex; align-items:center; gap:6px; }
+  .notes-text{ font-size:15px; color:var(--ink); white-space:pre-wrap; word-break:break-word; }
+  .notes-text.empty{ color:#A8A49B; }
+  .notes-edit{ display:none; width:100%; margin-top:8px; }
+  body.edit-mode .req.open .notes-text{ display:none; }
+  body.edit-mode .req.open .notes-edit{ display:block; }
 
   .edit-controls{ display:none; margin-top:12px; padding-top:12px; border-top:1px dashed var(--line); gap:12px; flex-wrap:wrap; align-items:flex-end; }
   body.edit-mode .edit-controls{ display:flex; }
@@ -317,6 +326,15 @@
 
     let editMode = false, suppliedOpen = false;
     let allRequests = [], lastFresh = null;
+    const openNotes = new Set();
+
+    function toggleNotes(id, headerEl){
+      const req = headerEl.closest('.req');
+      if(!req) return;
+      const isOpen = req.classList.toggle('open');
+      if(isOpen) openNotes.add(id); else openNotes.delete(id);
+    }
+    window.toggleNotes = toggleNotes;
     let fStatus = 'all', fDate = 'all', fSearch = '', grouped = false;
 
     // ---- lightbox ----
@@ -340,22 +358,26 @@
       const hasNotes = r.notes && r.notes.trim();
       const done = r.status === 'סופק';
       const prio = r.priority || 'רגילה';
-      const thumb = r.image_url ? `<img class="req-thumb" src="${esc(r.image_url)}" alt="תמונה" onclick="openLightbox('${esc(r.image_url)}')" />` : '';
+      const thumb = r.image_url ? `<img class="req-thumb" src="${esc(r.image_url)}" alt="תמונה" onclick="event.stopPropagation(); openLightbox('${esc(r.image_url)}')" />` : '';
+      const isOpen = openNotes.has(r.id);
+      const dot = hasNotes ? ' <i class="ti ti-message-2 note-dot" title="יש הערה"></i>' : '';
       return `
-        <div class="req${done?' done':''}${r.id===lastFresh?' fresh':''}">
+        <div class="req${done?' done':''}${r.id===lastFresh?' fresh':''}${isOpen?' open':''}">
           <div class="req-body">
-            <div class="req-top">
+            <div class="req-top" onclick="toggleNotes('${r.id}', this)">
               <div>
-                <div class="req-item">${esc(r.item)}</div>
+                <div class="req-item">${esc(r.item)}${dot}</div>
                 <div class="req-meta">
                   <span class="prio prio-${esc(prio)}"><i class="ti ${PRIO_ICON[prio]||'ti-minus'}"></i>${esc(prio)}</span>
                   <span><i class="ti ti-user"></i>${esc(r.requester)}</span>
                   <span><i class="ti ti-calendar"></i>${fmtDate(r.created_at)}</span>
                 </div>
               </div>
-              <span class="pill st-${esc(r.status)}">${esc(r.status)}</span>
+              <div class="req-top-right">
+                <span class="pill st-${esc(r.status)}">${esc(r.status)}</span>
+                <i class="ti ti-chevron-down req-chev"></i>
+              </div>
             </div>
-            ${hasNotes ? `<div class="req-notes"><i class="ti ti-message-2"></i><span>${esc(r.notes)}</span></div>` : ''}
             <div class="edit-controls">
               <div class="ec-field">
                 <label>סטטוס</label>
@@ -365,11 +387,12 @@
                 <label>עדיפות</label>
                 <select onchange="updatePriority('${r.id}', this.value)">${priorityOptions(prio)}</select>
               </div>
-              <div class="ec-field" style="flex:1;">
-                <label>הערת איש רכש</label>
-                <input class="notes-input" type="text" value="${esc(r.notes)}" placeholder="הוסף הערה…"
-                       onkeydown="if(event.key==='Enter')this.blur()" onblur="updateNotes('${r.id}', this.value)" />
-              </div>
+            </div>
+            <div class="notes-panel">
+              <div class="notes-head"><i class="ti ti-message-2"></i>הערות</div>
+              <div class="notes-text${hasNotes?'':' empty'}">${hasNotes ? esc(r.notes) : 'אין הערות עדיין.'}</div>
+              <input class="notes-input notes-edit" type="text" value="${esc(r.notes)}" placeholder="הוסף או ערוך הערה…"
+                     onkeydown="if(event.key==='Enter')this.blur()" onblur="updateNotes('${r.id}', this.value)" />
             </div>
           </div>
           ${thumb}
